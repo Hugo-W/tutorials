@@ -41,7 +41,8 @@ end
 function ProximalUpdateLinreg(a::Vector{Float64}, b::Float64,
                               x_init::Vector, stepsize::Float64)
   # Replace this code to return the correct update.
-  return x_init;
+  g = (a' * x_init - b) * a;
+  return x_init - stepsize * g / (1 + stepsize * norm(a)^2);  # ???
 end
 
 # x = SGUpdateLinreg(a::Vector{Float64}, b::Float64,
@@ -58,7 +59,8 @@ end
 function SGUpdateLinreg(a::Vector{Float64}, b::Float64,
                         x_init::Vector, stepsize::Float64)
   # Replace this code to return the correct update.
-  return x_init;
+  g = (a' * x_init - b) * a;
+  return x_init - stepsize * g;
 end
 
 # x = TruncatedUpdateLinreg(a::Vector{Float64}, b::Float64,
@@ -77,5 +79,7 @@ end
 function TruncatedUpdateLinreg(a::Vector{Float64}, b::Float64,
                                x_init::Vector, stepsize::Float64)
   # Replace this code to return the correct update.
-  return x_init;
+  g = (a' * x_init - b) * a;
+  lmbd = min(1, 1 / (stepsize * 2 * norm(a)^2));  # Lagrangian for constrained optimisation (using knowledge of convex function's infinimum (0 for linear regression)), lambda in [0, 1], lambda = min(1, (F - F')/(stepsize * norm(a)))
+  return x_init - stepsize * lmbd * g;
 end
