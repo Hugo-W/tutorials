@@ -20,6 +20,6 @@ def regularizedKernLSTrain(Xtr, Ytr, kernel, sigma, lam):
     n = Xtr.shape[0]
     K = kernelMatrix(Xtr, Xtr, sigma, kernel)
     ### COMPUTE THE WEIGHTS c
-    c = ...
+    c = np.matmul(np.linalg.inv(K + lam * n * np.eye(n)), Ytr)
     ###----------------------
     return c
